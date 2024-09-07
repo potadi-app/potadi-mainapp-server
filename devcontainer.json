@@ -1,0 +1,11 @@
+// This file is used to configure the development container for the project.
+{
+  "name": "Potadi Main-app DevContainer",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/app",
+  "extensions": ["ms-python.python"],
+  "settings": {
+    "python.pythonPath": "/usr/local/bin/python",
+  }
+}

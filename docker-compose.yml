@@ -1,0 +1,39 @@
+name: potadiapp-backend
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: potadiapp-web
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app # Bind mount for hot-reload
+      - /app/staticfiles
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - potadi-net
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000 --reload
+  db:
+    image: postgres:15
+    container_name: potadiapp-db
+    restart: always
+    ports:
+      - "5342:5432"
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - potadi-net
+    command: ["postgres", "-c", "log_statement=all"]  # show logs
+volumes:
+  postgres_data:
+
+networks:
+  potadi-net:
+    driver: bridge
