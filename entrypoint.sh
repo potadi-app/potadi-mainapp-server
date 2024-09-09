@@ -18,6 +18,7 @@ fi
 
 # Jalankan perintah makemigrations jika ada perubahan pada model
 echo "Running migrations..."
+python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
 # Jalankan collectstatic untuk mengumpulkan file statis

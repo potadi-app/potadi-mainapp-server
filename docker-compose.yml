@@ -17,13 +17,13 @@ services:
       - db
     networks:
       - potadi-net
-    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000 --reload
+    command: python manage.py runserver 0.0.0.0:8000
   db:
     image: postgres:15
     container_name: potadiapp-db
     restart: always
     ports:
-      - "5342:5432"
+      - "5432:5432"
     env_file:
       - .env
     volumes:
