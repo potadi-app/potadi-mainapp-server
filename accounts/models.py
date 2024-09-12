@@ -12,7 +12,7 @@ class User(AbstractUser):
         choices=REGISTRATION_CHOICES,
         default='email'
     )
-    avatar = models.ImageField(upload_to='avatars/', default='avatars/default.png', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', default=None, null=True, blank=True)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
