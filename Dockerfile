@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y netcat-openbsd
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Set environment variable to disable oneDNN custom operations
+ENV TF_ENABLE_ONEDNN_OPTS=0
+
 # Copy seluruh project ke dalam container
 COPY . .
 

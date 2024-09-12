@@ -4,3 +4,6 @@ venv
 .env
 
 staticfiles
+
+media/*
+!media/.gitkeep

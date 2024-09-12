@@ -31,12 +31,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'cloudinary_storage',
     'cloudinary',
     
     'rest_framework',
     'rest_framework.authtoken',
+    
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     
     'allauth',
     'allauth.account',
@@ -48,6 +50,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     
     'accounts',
+    'diagnose',
+    
 ]
 
 MIDDLEWARE = [
@@ -124,11 +128,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -141,6 +145,17 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Digital Assets Management
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
+
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
@@ -156,14 +171,16 @@ AUTHENTICATION_BACKENDS = [
 # Django REST Auth
 REST_AUTH = {
     'USE_JWT': True,
-    'JWT_AUTH_COOKIE': '_auth',
-    'JWT_AUTH_REFRESH_COOKIE': '_refresh',
     'JWT_AUTH_HTTPONLY': False,
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailsSerializer',
+    'REGISTER_SERIALIZER': 'accounts.serializers.RegisterSerializer',
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),  # Sesi login 15 menit untuk access token
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Sesi login 15 menit untuk access token
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh token berlaku selama 7 hari
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
@@ -199,7 +216,6 @@ SOCIALACCOUNT_PROVIDERS = {
             'profile',
             'email',
             'openid',
-            'offline_access'
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
@@ -210,19 +226,16 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# Digital Assets Management
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-}
-
 # CORS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
 GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
 GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
+
+CSRF_COOKIE_HTTPONLY = True
