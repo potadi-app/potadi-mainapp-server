@@ -21,3 +21,7 @@ Before starting, make sure you have [Docker](https://docs.docker.com/get-docker/
 - restart:
   ```bash
   docker logs -f potadiapp-web
+
+# API Documentation
+  ```bash
+  http://localhost:8000/v1/docs
