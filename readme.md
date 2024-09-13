@@ -23,5 +23,6 @@ Before starting, make sure you have [Docker](https://docs.docker.com/get-docker/
   docker logs -f potadiapp-web
 
 # API Documentation
+You can change the documentation version using swagger or redoc by changing the `v` value.
   ```bash
-  http://localhost:8000/v1/docs
+  http://localhost:8000/v1/docs/?v=redoc
