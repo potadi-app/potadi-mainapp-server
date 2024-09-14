@@ -1,8 +1,9 @@
+import time
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import DiagnoseSerializer
-from .services import predict_disease
+from .services import predict_disease_saved_model
 from .models import Diagnose
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -77,11 +78,12 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
         tags=['Disease Detection']
     )
     def create(self, request):
+        start = time.time()
         serializer = DiagnoseSerializer(data=request.data)
         if serializer.is_valid():
             image_data = request.FILES.get('image')
             
-            detection_result = predict_disease(image_data)
+            detection_result = predict_disease_saved_model(image_data)
             
             prediction = Diagnose.objects.create(
                 user=request.user,
@@ -91,6 +93,8 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
                 detail=detection_result['probabilities']
             )
             response_serializer = DiagnoseSerializer(prediction, context={'request': request})
+            end = time.time()
+            print(f"Time taken to diagnose: {end - start}")
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         
         return Response({
