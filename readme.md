@@ -3,6 +3,10 @@
 
 Before starting, make sure you have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on your system.
 
+## Model .h5
+You can download the trained model [here](https://drive.google.com/drive/u/0/folders/19LkNr1iFGBlNjC2bGzn_av9zZgBTDMt7).
+
+## Setup
 1. **Clone repository:**
    ```bash
    git clone https://github.com/potadi-app/potadi-mainapp-server.git
