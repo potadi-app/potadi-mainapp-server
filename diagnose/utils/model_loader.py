@@ -20,12 +20,12 @@ class ModelLoader:
         return ModelLoader._model_h5
     
     @staticmethod
-    def load_saved_model():
+    def load_saved_model(version=1):
         """
         Load the trained model from SavedModel format.
         :return: The trained model.
         """
         if ModelLoader._model_saved is None:
-            ModelLoader._model_saved = tf.saved_model.load(f"{BASE_DIR}/diagnose/model/savedModel")
+            ModelLoader._model_saved = tf.saved_model.load(f"{BASE_DIR}/diagnose/model/savedModel/{version}")
         
         return ModelLoader._model_saved

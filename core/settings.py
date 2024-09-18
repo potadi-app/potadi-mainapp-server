@@ -177,7 +177,7 @@ REST_AUTH = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Sesi login 15 menit untuk access token
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Sesi login 15 menit untuk access token
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh token berlaku selama 7 hari
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,

@@ -83,7 +83,7 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
         if serializer.is_valid():
             image_data = request.FILES.get('image')
             
-            detection_result = predict_disease_saved_model(image_data)
+            detection_result = predict_disease_saved_model(image_data, version=1)
             
             prediction = Diagnose.objects.create(
                 user=request.user,

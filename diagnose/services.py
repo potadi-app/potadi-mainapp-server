@@ -36,7 +36,7 @@ def predict_disease_h5(image):
     except Exception as e:
         raise Exception(f'Error while predicting: {e}')
 
-def predict_disease_saved_model(image):
+def predict_disease_saved_model(image, version=1):
     """Predicts the disease of a potato leaf using a saved model.
     Args:
         image: The uploaded potato leaf image.
@@ -48,7 +48,7 @@ def predict_disease_saved_model(image):
     try:
         processed_image = preprocess_image(image)
         
-        model = ModelLoader.load_saved_model()
+        model = ModelLoader.load_saved_model(version=version)
         infer = model.signatures["serving_default"]
         
         # Ensure the image tensor has the correct shape
