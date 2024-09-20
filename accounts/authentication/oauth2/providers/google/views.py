@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from accounts.authentication.utils import generate_tokens_for_user, get_user_data, get_or_create_user
+from dj_rest_auth.jwt_auth import set_jwt_cookies
 
 class GoogleLoginAPI(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
@@ -23,9 +24,9 @@ class GoogleLoginAPI(SocialLoginView):
                 access_token, refresh_token = generate_tokens_for_user(user)
                 response_data = {
                     'user': user_data,
-                    'access': access_token,
-                    'refresh': refresh_token
+                    'accessToken': access_token,
                 }
+                set_jwt_cookies(response, refresh_token)
                 return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(

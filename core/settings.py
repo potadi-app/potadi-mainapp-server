@@ -24,28 +24,28 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
     'cloudinary_storage',
     'cloudinary',
     
     'rest_framework',
     'rest_framework.authtoken',
-    
-    'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    
+        
+        
     'dj_rest_auth',
+    'dj_rest_auth.registration',
     
     'drf_yasg',
     
@@ -55,9 +55,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -168,18 +168,24 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+SITE_ID = 1  # Pastikan kamu telah menetapkan Site ID yang benar
+
 # Django REST Auth
 REST_AUTH = {
-    'USE_JWT': True,
-    'JWT_AUTH_HTTPONLY': False,
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailsSerializer',
     'REGISTER_SERIALIZER': 'accounts.serializers.RegisterSerializer',
+    'SESSION_LOGIN': False,
+    'USE_JWT': True,
+    'JWT_AUTH_HTTPONLY': True,
+    'JWT_AUTH_COOKIE': 'access_token',
+    'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
+    'JWT_AUTH_SECURE': True,
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Sesi login 15 menit untuk access token
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),  # Sesi login 15 menit untuk access token
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh token berlaku selama 7 hari
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
@@ -193,7 +199,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-SITE_ID = 1  # Pastikan kamu telah menetapkan Site ID yang benar
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # Use Email / Password authentication
 ACCOUNT_USERNAME_REQUIRED = False
@@ -228,14 +233,11 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:8000",
+    "http://localhost:5173",
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
 GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
 GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
-
-CSRF_COOKIE_HTTPONLY = True
