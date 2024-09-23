@@ -21,18 +21,16 @@ def get_user_data(user):
         return None
     
 def get_or_create_user(user_data):
-    try:
-        user = User.objects.get(email=user_data['email'])
-    except User.DoesNotExist:
+    user = User.objects.filter(email=user_data['email']).first()
+    
+    if not user:
         user = User.objects.create_user(
             email=user_data['email'],
+            username=user_data['email'],
             first_name=user_data['first_name'],
             last_name=user_data['last_name'],
-            registration_method='google',
-            avatar=user_data.get('picture', None),
+            google_avatar_url=user_data['picture'],
+            registration_method='google'
         )
-    else:
-        if user.registration_method != 'google':
-            user.registration_method = 'google'
-            user.save()
+        
     return user

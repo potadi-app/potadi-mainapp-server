@@ -168,7 +168,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1  # Pastikan kamu telah menetapkan Site ID yang benar
+SITE_ID = 1
 
 # Django REST Auth
 REST_AUTH = {
@@ -177,14 +177,14 @@ REST_AUTH = {
     'SESSION_LOGIN': False,
     'USE_JWT': True,
     'JWT_AUTH_HTTPONLY': True,
-    'JWT_AUTH_COOKIE': 'access_token',
-    'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
+    'JWT_AUTH_COOKIE': 'auth_token',
+    'JWT_AUTH_REFRESH_COOKIE': 'auth_token_refresh',
     'JWT_AUTH_SECURE': True,
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),  # Sesi login 15 menit untuk access token
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh token berlaku selama 7 hari
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -209,22 +209,22 @@ ACCOUNT_EMAIL_VERIFICATION = "none" # Do not require email confirmation
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 # Connect local account and social account if local account with that email address already exists
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+# A
+SOCIALACCOUNT_ADAPTER = 'accounts.authentication.adapter.CustomSocialAccountAdapter'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
             'client_id': os.getenv('GOOGLE_OAUTH_CLIENT_ID'),
             'secret': os.getenv('GOOGLE_OAUTH_CLIENT_SECRET'),
-            'key': ''
             },
         'SCOPE': [
-            'profile',
             'email',
+            'profile',
             'openid',
         ],
         'AUTH_PARAMS': {
-            'access_type': 'offline',
-            "prompt": "consent",
+            'access_type': 'online',
         },
         'FETCH_USER_INFO': True,
         'OAUTH_PKCE_ENABLED': True,

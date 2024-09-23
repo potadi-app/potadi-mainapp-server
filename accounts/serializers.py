@@ -2,13 +2,18 @@ from .models import User
 from rest_framework import serializers
 
 class UserDetailsSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'registration_method', 'avatar', 'is_active']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'registration_method', 'avatar_url', 'is_active']
         read_only_fields = ['id', 'registration_method', 'is_active']
-        extra_kwargs = {
-            'avatar': {'read_only': True}
-        }
+
+    def get_avatar_url(self, obj):
+        if obj.avatar:
+            return obj.avatar.url
+        elif obj.google_avatar_url:
+            return obj.google_avatar_url
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
