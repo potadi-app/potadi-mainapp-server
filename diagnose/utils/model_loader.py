@@ -26,6 +26,6 @@ class ModelLoader:
         :return: The trained model.
         """
         if ModelLoader._model_saved is None:
-            ModelLoader._model_saved = tf.saved_model.load(f"{BASE_DIR}/diagnose/model/savedModel/{version}")
+            ModelLoader._model_saved = tf.saved_model.load(f"{BASE_DIR}/diagnose/model/savedModel/v{version}")
         
         return ModelLoader._model_saved
