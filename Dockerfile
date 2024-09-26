@@ -1,5 +1,5 @@
-# Gunakan image Python 3.11-slim sebagai basis
-FROM python:3.11-slim
+# Image Python 3.11-slim
+FROM python:3.11-slim AS build-stage
 
 # Set working directory dalam container
 WORKDIR /app

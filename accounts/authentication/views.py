@@ -1,13 +1,9 @@
 from django.contrib.auth import logout as django_logout
 from rest_framework.response import Response
 from rest_framework import status
-from django.dispatch import Signal
 from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import LogoutView
 from django.core.exceptions import ObjectDoesNotExist
-
-user_logged_out = Signal()
-
 
 class CustomLogoutView(LogoutView):
     def logout(self, request):

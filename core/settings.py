@@ -20,7 +20,6 @@ DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -73,7 +72,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -170,8 +169,18 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
+# Email Backend Conf
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
 # Django REST Auth
 REST_AUTH = {
+    'PASSWORD_RESET_SERIALIZER': 'accounts.serializers.CustomPasswordResetSerializer',
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'accounts.serializers.PasswordResetConfirmSerializer',
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailsSerializer',
     'REGISTER_SERIALIZER': 'accounts.serializers.RegisterSerializer',
     'SESSION_LOGIN': False,
@@ -183,11 +192,10 @@ REST_AUTH = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 REST_FRAMEWORK = {
@@ -199,7 +207,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-
+# ACCOUNT_ADAPTER = 'accounts.adapter.CustomAccountAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # Use Email / Password authentication
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
@@ -232,7 +240,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # CORS
-CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS =[
     "http://localhost:5173",
 ]
 

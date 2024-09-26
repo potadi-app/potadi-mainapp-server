@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: potadiapp-web
+    container_name: backend
     restart: always
     ports:
       - "8000:8000"
@@ -20,7 +20,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
   db:
     image: postgres:15
-    container_name: potadiapp-db
+    container_name: db
     restart: always
     ports:
       - "5432:5432"
