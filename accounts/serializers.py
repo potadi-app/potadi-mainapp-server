@@ -9,18 +9,21 @@ from django.utils.encoding import force_str
 from rest_framework.exceptions import ValidationError
 
 class UserDetailsSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
+    avatar = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'registration_method', 'avatar_url', 'is_active']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'registration_method', 'avatar', 'is_active']
         read_only_fields = ['id', 'registration_method', 'is_active']
 
-    def get_avatar_url(self, obj):
-        if obj.avatar:
-            return obj.avatar.url
-        elif obj.google_avatar_url:
-            return obj.google_avatar_url
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.avatar and instance.registration_method == 'email':
+            representation['avatar'] = f"{os.getenv('BASE_DOMAIN')}{instance.avatar.url}"
+        elif instance.google_avatar_url:
+            representation['avatar'] = instance.google_avatar_url
+
+        return representation
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
