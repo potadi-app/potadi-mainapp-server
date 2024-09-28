@@ -207,7 +207,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ACCOUNT_ADAPTER = 'accounts.adapter.CustomAccountAdapter'
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # Use Email / Password authentication
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
@@ -218,7 +217,7 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 # Connect local account and social account if local account with that email address already exists
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 # A
-SOCIALACCOUNT_ADAPTER = 'accounts.authentication.adapter.CustomSocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'accounts.authentication.adapter.MySocialAccountAdapter'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

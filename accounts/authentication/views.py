@@ -4,6 +4,29 @@ from rest_framework import status
 from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import LogoutView
 from django.core.exceptions import ObjectDoesNotExist
+from dj_rest_auth.registration.views import SocialAccountListView as _SocialAccountListView
+
+class SocialAccountListView(_SocialAccountListView):
+    def get(self, request, *args, **kwargs):
+        accounts = self.get_queryset()
+        response = []
+        
+        for account in accounts:
+            email = account.extra_data.get('email') if account.extra_data else None
+            last_login = account.user.last_login if account.user else None
+            date_joined = account.user.date_joined if account.user else None
+            
+            response.append({
+                'id': account.id,
+                'provider': account.provider,
+                'uid': account.uid,
+                'email': email,
+                'last_login': last_login,
+                'date_joined': date_joined,
+                # 'extra_data': account.extra_data,
+            })
+        
+        return Response(response)
 
 class CustomLogoutView(LogoutView):
     def logout(self, request):
