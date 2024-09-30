@@ -26,6 +26,8 @@ COPY . .
 
 # Set environment variable untuk Django
 ENV PYTHONUNBUFFERED=1
+# Ubah menjadi 0 untuk produksi
+ENV DEBUG=0
 
 # Salin entrypoint.sh dan berikan hak akses eksekusi
 COPY entrypoint.sh /app/entrypoint.sh
