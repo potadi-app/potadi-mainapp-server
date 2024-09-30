@@ -1,7 +1,7 @@
 import time
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from .serializers import DiagnoseSerializer
 from .services import predict_disease_saved_model
 from .models import Diagnose
@@ -17,8 +17,11 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
     )
     def list(self, request):
         predictions = Diagnose.objects.filter(user=request.user).order_by('-created_at')
-        serializer = DiagnoseSerializer(predictions, many=True, context={'request': request})
-        return Response(serializer.data)
+        paginator = PageNumberPagination()
+        paginator.page_size = 25
+        result_page = paginator.paginate_queryset(predictions, request)
+        serializer = DiagnoseSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
 
     @swagger_auto_schema(
         responses={

@@ -183,6 +183,7 @@ REST_AUTH = {
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'accounts.serializers.PasswordResetConfirmSerializer',
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailsSerializer',
     'REGISTER_SERIALIZER': 'accounts.serializers.RegisterSerializer',
+    'OLD_PASSWORD_FIELD_ENABLED': True,
     'SESSION_LOGIN': False,
     'USE_JWT': True,
     'JWT_AUTH_HTTPONLY': True,
@@ -205,6 +206,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 }
 
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # Use Email / Password authentication
