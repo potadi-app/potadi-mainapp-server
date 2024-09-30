@@ -25,9 +25,7 @@ ENV TF_ENABLE_ONEDNN_OPTS=0
 COPY . .
 
 # Set environment variable untuk Django
-ENV PYTHONUNBUFFERED 1
-# Ubah menjadi 0 untuk produksi
-ENV DEBUG 1
+ENV PYTHONUNBUFFERED=1
 
 # Salin entrypoint.sh dan berikan hak akses eksekusi
 COPY entrypoint.sh /app/entrypoint.sh
