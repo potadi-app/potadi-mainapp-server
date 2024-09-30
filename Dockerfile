@@ -12,7 +12,9 @@ RUN apt-get update && \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
-    libxrender-dev
+    libxrender-dev \
+    python3-dev \
+    python3-pip 
 
 # Copy requirements.txt dan install dependensi
 COPY requirements.txt requirements.txt
