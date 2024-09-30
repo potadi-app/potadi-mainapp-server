@@ -1,5 +1,5 @@
 # Image Python 3.11-slim
-FROM python:3.11-slim AS build-stage
+FROM python:3.11-bullseye AS build-stage
 
 # Set working directory dalam container
 WORKDIR /app
@@ -20,6 +20,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Set environment variable to disable oneDNN custom operations
 ENV TF_ENABLE_ONEDNN_OPTS=0
+ENV OPENBLAS_CORETYPE=ARMV8
+ENV TF_CPP_MIN_LOG_LEVEL=2
 
 # Copy seluruh project ke dalam container
 COPY . .
