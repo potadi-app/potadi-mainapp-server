@@ -43,7 +43,7 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
     )
     def retrieve(self, request, pk=None):
         try:
-            prediction = Diagnose.objects.get(user=request.user, id=pk)
+            prediction = Diagnose.objects.get(user=request.user, uuid=pk)
             serializer = DiagnoseSerializer(prediction, context={'request': request})
             return Response(serializer.data)
         except Diagnose.DoesNotExist:
