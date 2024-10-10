@@ -1,7 +1,7 @@
-import time
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import DiagnoseSerializer
 from .services import predict_disease_saved_model
 from .models import Diagnose
@@ -9,6 +9,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 class DiagnoseViewSetAPI(viewsets.ViewSet):
+    parser_classes = (MultiPartParser, FormParser)
+    
     @swagger_auto_schema(
         responses={status.HTTP_200_OK: DiagnoseSerializer(many=True)},
         operation_description="Retrieve a list of disease predictions.",
@@ -53,13 +55,15 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
             }, status=status.HTTP_404_NOT_FOUND)
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'image': openapi.Schema(type=openapi.TYPE_FILE, description='Upload an image of a potato leaf')
-            },
-            required=['image'],
-        ),
+        manual_parameters=[
+            openapi.Parameter(
+                name='image',
+                in_=openapi.IN_FORM,
+                type=openapi.TYPE_FILE,
+                required=True,
+                description='Image file to upload'
+            ),
+        ],
         responses={
             status.HTTP_201_CREATED: openapi.Response(
                 description="Disease detected successfully",
@@ -81,23 +85,20 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
         tags=['Disease Detection']
     )
     def create(self, request):
-        start = time.time()
         serializer = DiagnoseSerializer(data=request.data)
         if serializer.is_valid():
             image_data = request.FILES.get('image')
             
-            detection_result = predict_disease_saved_model(image_data, version=1)
+            detection_result = predict_disease_saved_model(image=image_data)
             
             prediction = Diagnose.objects.create(
                 user=request.user,
                 image=image_data,
                 label=detection_result['label'],
                 confidence=detection_result['confidence'],
-                detail=detection_result['probabilities']
+                details=detection_result['details']
             )
             response_serializer = DiagnoseSerializer(prediction, context={'request': request})
-            end = time.time()
-            print(f"Time taken to diagnose: {end - start}")
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         
         return Response({

@@ -10,7 +10,7 @@ class Diagnose(models.Model):
     image = models.ImageField(upload_to=user_directory_path)
     label = models.CharField(max_length=100)
     confidence = models.FloatField()
-    detail = models.JSONField()
+    details = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:

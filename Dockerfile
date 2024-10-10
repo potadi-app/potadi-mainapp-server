@@ -1,5 +1,5 @@
 # Image Python 3.11-slim
-FROM python:3.11-bullseye AS build-stage
+FROM python:3.11-slim AS build-stage
 
 # Set working directory dalam container
 WORKDIR /app
@@ -20,24 +20,20 @@ RUN apt-get update && \
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Set environment variable to disable oneDNN custom operations
-ENV TF_ENABLE_ONEDNN_OPTS=0
-ENV OPENBLAS_CORETYPE=ARMV8
-ENV TF_CPP_MIN_LOG_LEVEL=2
-
 # Copy seluruh project ke dalam container
 COPY . .
 
 # Set environment variable untuk Django
 ENV PYTHONUNBUFFERED=1
-# Ubah menjadi 0 untuk produksi
-ENV DEBUG=0
 
-# Salin entrypoint.sh dan berikan hak akses eksekusi
+# Set to 0 in production
+ENV DEBUG=1
+
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-# Expose port untuk Django
+# Expose port 8000 for Django
 EXPOSE 8000
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]

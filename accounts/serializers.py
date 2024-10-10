@@ -19,7 +19,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if instance.avatar and instance.registration_method == 'email':
-            representation['avatar'] = f"{os.getenv('BASE_DOMAIN')}{instance.avatar.url}"
+            representation['avatar'] = f"{os.getenv('SERVER_DOMAIN')}{instance.avatar.url}"
         elif instance.google_avatar_url:
             representation['avatar'] = instance.google_avatar_url
 
@@ -67,7 +67,7 @@ class CustomPasswordResetSerializer(PasswordResetSerializer):
     def get_email_options(self):
         return {
             'extra_email_context': {
-                'domain': os.getenv('DOMAIN')
+                CLIENT_DOMAIN: os.getenv(CLIENT_DOMAIN)
             }
         }
 

@@ -6,8 +6,8 @@ class DiagnoseSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Diagnose
-        fields = ['id', 'image', 'label', 'confidence', 'detail', 'created_at']
-        read_only_fields = ['label', 'confidence', 'detail', 'created_at']
+        fields = ['id', 'image', 'label', 'confidence', 'details', 'uuid', 'created_at']
+        read_only_fields = ['label', 'confidence', 'details', 'created_at']
         
     # def get_image(self, obj):
     #     request = self.context.get('request')

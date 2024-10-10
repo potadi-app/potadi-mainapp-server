@@ -1,91 +1,26 @@
-import tensorflow as tf
-from .utils.model_loader import ModelLoader
-from .utils.image_processing import preprocess_image
-
-def predict_disease_h5(image):
-    """Predicts the disease of a potato leaf using a .h5 model.
-    Args:
-        image: The uploaded potato leaf image.
-    Returns:
-        dict:
-            A dictionary containing the disease label and confidence.
-    """
-    
-    try:
-        processed_image = preprocess_image(image)
-        
-        model = ModelLoader.load_trained_model()
-        
-        prediction = model.predict(processed_image)[0]
-        
-        probabilities  = {
-            'early_blight': prediction[0],
-            'healthy': prediction[1],
-            'late_blight': prediction[2]
-        }
-        
-        probabilities = {k: round(v * 100, 2) for k, v in probabilities.items()}
-        
-        label, confidence = convert_prediction_to_label(probabilities)
-        
-        return {
-            'label': label,
-            'confidence': confidence,
-            'probabilities': probabilities
-        }
-    except Exception as e:
-        raise Exception(f'Error while predicting: {e}')
+import requests
+import os
 
 def predict_disease_saved_model(image, version=1):
     """Predicts the disease of a potato leaf using a saved model.
     Args:
-        image: The uploaded potato leaf image.
+        version: Version of the model (default is 1).
     Returns:
         dict:
             A dictionary containing the disease label and confidence.
     """
     
+    url = f'{os.getenv("FASTAPI_SERVER_URL")}/api/diagnose'
     try:
-        processed_image = preprocess_image(image)
+        # Make the POST request to the FastAPI server
+        response = requests.post(url, files={'image': image})
         
-        model = ModelLoader.load_saved_model(version=version)
-        infer = model.signatures["serving_default"]
-        
-        # Ensure the image tensor has the correct shape
-        input_tensor = tf.convert_to_tensor(processed_image, dtype=tf.float32)
-        
-        # Perform the inference
-        prediction = infer(input_tensor)
+        # Check if the request was successful
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Error: {response.status_code} - {response.text}")
+            return response.text
 
-        # Adjust this line based on the actual output of the model
-        prediction_output = prediction['dense_1'] if 'dense_1' in prediction else list(prediction.values())[0]
-        
-        # Assuming prediction_output is a tensor of shape [1, num_classes]
-        probabilities = {
-            'early_blight': prediction_output[0][0].numpy(),
-            'healthy': prediction_output[0][1].numpy(),
-            'late_blight': prediction_output[0][2].numpy()
-        }
-        
-        probabilities = {k: round(v * 100, 2) for k, v in probabilities.items()}
-        
-        label, confidence = convert_prediction_to_label(probabilities)
-        
-        return {
-            'label': label,
-            'confidence': confidence,
-            'probabilities': probabilities
-        }
     except Exception as e:
         raise Exception(f'Error while predicting: {e}')
-
-
-def convert_prediction_to_label(probabilities: dict) -> tuple:
-    """
-    Converts the prediction result into an understandable label based on the highest probability.
-    :param probabilities: Probabilities for each label.
-    :return: Disease label and highest confidence score.
-    """
-    label = max(probabilities, key=probabilities.get)  # Get the label with the highest confidence
-    confidence = probabilities[label]  # Highest confidence value
-    return label, confidence
