@@ -26,8 +26,8 @@ def api_docs_view(request):
     doc_type = request.GET.get('v')
     
     if not doc_type:
-        # If 'v' parameter is not present, redirect to the same URL with 'v=redoc'
-        query_params = urlencode({'v': 'redoc'})
+        # If 'v' parameter is not present, redirect to the same URL with 'v=swagger'
+        query_params = urlencode({'v': 'swagger'})
         redirect_url = f"{request.path}?{query_params}"
         return HttpResponseRedirect(redirect_url)
     

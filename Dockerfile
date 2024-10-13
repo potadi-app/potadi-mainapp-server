@@ -27,7 +27,7 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Set to 0 in production
-ENV DEBUG=1
+ENV DEBUG=0
 
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh

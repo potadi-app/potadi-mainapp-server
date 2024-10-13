@@ -10,7 +10,7 @@ def predict_disease_saved_model(image, version=1):
             A dictionary containing the disease label and confidence.
     """
     
-    url = f'{os.getenv("FASTAPI_SERVER_URL")}/api/diagnose'
+    url = f'{os.getenv("SERVICES_DOMAIN")}/api/diagnose'
     try:
         # Make the POST request to the FastAPI server
         response = requests.post(url, files={'image': image})
