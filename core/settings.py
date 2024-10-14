@@ -232,29 +232,29 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # CORS
-# CORS_ORIGIN_WHITELIST = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_WHITELIST = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_HEADERS = [
-    'content-type',
-    'authorization',
-    'cache-control',
-    'x-requested-with',
-    'origin',
-]
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
 
-CORS_ALLOW_METHODS = [
+CORS_ALLOW_METHODS = (
     'DELETE',
     'GET',
     'OPTIONS',
     'PATCH',
     'POST',
     'PUT',
-]
-
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+)
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # USE_X_FORWARDED_HOST = True
 # SECURE_SSL_REDIRECT = True
