@@ -233,7 +233,10 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # CORS
 CORS_ORIGIN_WHITELIST = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+CORS_ALLOWED_ORIGINS = [
+    "https://app.potadi.ai",
+    "https://potadi.ai",
+]
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.potadi\.ai$",
 ]
