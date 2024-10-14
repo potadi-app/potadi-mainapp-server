@@ -232,19 +232,19 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # CORS
-CORS_ORIGIN_WHITELIST = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
-CORS_ALLOWED_ORIGINS = [
-    "https://app.potadi.ai",
-    "https://potadi.ai",
-]
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.potadi\.ai$",
-]
+# CORS_ORIGIN_WHITELIST = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+# CORS_ALLOWED_ORIGINS = [
+#     "https://app.potadi.ai",
+#     "https://potadi.ai",
+# ]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"^https://.*\.potadi\.ai$",
+# ]
 print("CORS_ALLOWED_ORIGINS:", os.getenv('CORS_ALLOWED_ORIGINS'))
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+# CSRF_TRUSTED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
 
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -265,10 +265,6 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
-
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# USE_X_FORWARDED_HOST = True
-# SECURE_SSL_REDIRECT = True
 
 GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
 GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
