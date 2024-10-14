@@ -232,39 +232,14 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # CORS
-# CORS_ORIGIN_WHITELIST = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
-# CORS_ALLOWED_ORIGINS = [
-#     "https://app.potadi.ai",
-#     "https://potadi.ai",
-# ]
-# CORS_ALLOWED_ORIGIN_REGEXES = [
-#     r"^https://.*\.potadi\.ai$",
-# ]
-print("CORS_ALLOWED_ORIGINS:", os.getenv('CORS_ALLOWED_ORIGINS'))
+ALLOWED_HOSTS=['https://app.potadi.ai', 'http://app.potadi.ai']
 
-# CSRF_TRUSTED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
+CORS_ORIGIN_WHITELIST = (
+    'https://app.potadi.ai',
+    'http://app.potadi.ai'
+)
 
 GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
 GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
