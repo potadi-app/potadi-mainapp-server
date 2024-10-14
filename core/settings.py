@@ -18,8 +18,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['*']
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,9 +50,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -234,12 +232,11 @@ SOCIALACCOUNT_PROVIDERS = {
 # CORS
 ALLOWED_HOSTS=os.getenv('ALLOWED_HOSTS').split(',')
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOWED_ORIGINS_REGEX = [
+    r"^https://.*\.potadi\.ai$",
+]
 
-CORS_ORIGIN_WHITELIST = (
-    'https://app.potadi.ai',
-    'http://app.potadi.ai'
-)
+CORS_ALLOW_CREDENTIALS = True
 
 GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
 GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
