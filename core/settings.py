@@ -241,6 +241,16 @@ CORS_ALLOW_HEADERS = [
     'authorization',
     'cache-control',
     'x-requested-with',
+    'origin',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
