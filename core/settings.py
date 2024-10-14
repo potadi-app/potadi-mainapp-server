@@ -232,7 +232,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # CORS
-ALLOWED_HOSTS=['https://app.potadi.ai', 'http://app.potadi.ai']
+ALLOWED_HOSTS=os.getenv('ALLOWED_HOSTS').split(',')
 
 CORS_ORIGIN_ALLOW_ALL = False
 
