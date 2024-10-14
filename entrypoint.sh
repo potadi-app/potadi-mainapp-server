@@ -23,10 +23,8 @@ python manage.py makemigrations diagnose --noinput
 python manage.py migrate --noinput
 
 # Jalankan collectstatic untuk mengumpulkan file statis
-if [ "$DEBUG" = "0" ]; then
-  echo "Collecting static files..."
-  python manage.py collectstatic --noinput
-fi
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
 
 # Menjalankan perintah Gunicorn (atau perintah lainnya) yang dikirimkan ke container
 exec "$@"
