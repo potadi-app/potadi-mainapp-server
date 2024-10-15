@@ -230,9 +230,13 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # CORS
-ALLOWED_HOSTS=['*']
+ALLOWED_HOSTS = ['*']
 
-CORS_ALLOWED_ORIGINS_REGEX = [
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "https://app.potadi.ai",
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.potadi\.ai$",
 ]
 
@@ -256,6 +260,13 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = ['https://app.potadi.ai']
 
 GOOGLE_OAUTH_CALLBACK_URL = os.getenv('GOOGLE_OAUTH_CALLBACK_URL')
 GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
