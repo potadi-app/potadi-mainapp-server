@@ -35,6 +35,7 @@ jobs:
         #   HOST: ${{ secrets.SERVER_HOST }}
         #   USER: ${{ secrets.SERVER_USER }}
         run: |
+            pwd
             cd /home/lppm/APPS/potadiapp-backend
             git pull
             docker-compose down
