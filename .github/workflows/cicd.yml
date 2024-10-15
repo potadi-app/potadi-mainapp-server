@@ -35,10 +35,8 @@ jobs:
         #   HOST: ${{ secrets.SERVER_HOST }}
         #   USER: ${{ secrets.SERVER_USER }}
         run: |
-          EOF
             cd /home/lppm/APPS/potadiapp-backend
             git pull
             docker-compose down
             docker-compose up -d --build
             docker network connect tunnel backend
-          EOF
