@@ -16,25 +16,22 @@ jobs:
       # Step 1: Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
+      
+      # Step 2: Setup SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.0
         with:
-          fetch-depth: 0
-
-      # Step 2: Set up Docker
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      # Step 4: Pull the latest changes
-      - name: Git Pull Latest Changes
-        run: git pull origin master
-
-      # Step 5: Bring down any existing containers
-      - name: Stop and remove old containers
-        run: docker-compose down
-
-      # Step 6: Build and start new containers
-      - name: Build and start containers
-        run: docker-compose up -d --build
-
-      # Step 7: Connect to tunnel network
-      - name: Connect container to network tunnel
-        run: docker network connect tunnel backend
+          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+      # Step 3: Deploy to server
+      - name: Deploy to server
+        env:
+          HOST: ${{ secrets.SERVER_HOST }}
+          USER: ${{ secrets.SERVER_USER }}
+        run: |
+          ssh -o StrictHostKeyChecking=no $USER@$HOST << EOF
+            cd /path/to/your/project
+            git pull
+            docker-compose down
+            docker-compose up -d --build
+            docker network connect tunnel backend
+          EOF
