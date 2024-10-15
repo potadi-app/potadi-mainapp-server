@@ -18,24 +18,24 @@ jobs:
         uses: actions/checkout@v3
 
       # Step 2: Set up SSH key (using printf to handle multiline)
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          printf "%s" "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H -p 8822 ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+      # - name: Set up SSH key
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     printf "%s" "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-keyscan -H -p 8822 ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       # Step 3: Add server to known hosts
-      - name: Add server to known hosts
-        run: ssh-keyscan -H -p 8822 ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+      # - name: Add server to known hosts
+      #   run: ssh-keyscan -H -p 8822 ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       # Step 4: Deploy to server
       - name: Deploy to server
-        env:
-          HOST: ${{ secrets.SERVER_HOST }}
-          USER: ${{ secrets.SERVER_USER }}
+        # env:
+        #   HOST: ${{ secrets.SERVER_HOST }}
+        #   USER: ${{ secrets.SERVER_USER }}
         run: |
-          ssh -p 8822 $USER@$HOST << EOF
+          EOF
             cd /home/lppm/APPS/potadiapp-backend
             git pull
             docker-compose down
