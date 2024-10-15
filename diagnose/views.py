@@ -141,7 +141,7 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
             return Response({
                     'status': 'success',
                     'message': 'Prediction successfully deleted'
-                }, status=status.HTTP_204_NO_CONTENT)
+                }, status=status.HTTP_200_OK)
         except Diagnose.DoesNotExist:
             return Response({
                 'status': 'error',
