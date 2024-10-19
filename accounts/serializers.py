@@ -67,7 +67,7 @@ class CustomPasswordResetSerializer(PasswordResetSerializer):
     def get_email_options(self):
         return {
             'extra_email_context': {
-                'CLIENT_DOMAIN': os.getenv('CLIENT_DOMAIN')
+                'domain': os.getenv('CLIENT_DOMAIN')
             }
         }
 
