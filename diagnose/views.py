@@ -10,22 +10,10 @@ from drf_yasg import openapi
 from .serializers import DiagnoseSerializer
 from .services import predict_disease_saved_model
 from .models import Diagnose
+from django.db import models
 
 class DiagnoseViewSetAPI(viewsets.ViewSet):
     parser_classes = (MultiPartParser, FormParser)
-    
-    @swagger_auto_schema(
-        responses={status.HTTP_200_OK: DiagnoseSerializer(many=True)},
-        operation_description="Retrieve all disease predictions without pagination.",
-        operation_summary="List All Disease Predictions",
-        tags=['Disease Detection']
-    )
-    @action(detail=False, methods=['get'], url_path='all')
-    @method_decorator(cache_page(60*5)) # Cache for 5 minutes
-    def list_all(self, request):
-        predictions = Diagnose.objects.filter(user=request.user).order_by('-created_at')
-        serializer = DiagnoseSerializer(predictions, many=True, context={'request': request})
-        return Response(serializer.data)
     
     @swagger_auto_schema(
         responses={status.HTTP_200_OK: DiagnoseSerializer(many=True)},
@@ -163,3 +151,35 @@ class DiagnoseViewSetAPI(viewsets.ViewSet):
                 'status': 'error',
                 'message': 'Prediction not found'
             }, status=status.HTTP_404_NOT_FOUND)
+    
+    @swagger_auto_schema(
+        responses={status.HTTP_200_OK: DiagnoseSerializer(many=True)},
+        operation_description="Retrieve all disease predictions without pagination.",
+        operation_summary="List All Disease Predictions",
+        tags=['Disease Detection']
+    )
+    @action(detail=False, methods=['get'], url_path='all')
+    @method_decorator(cache_page(60*5)) # Cache for 5 minutes
+    def list_all(self, request):
+        predictions = Diagnose.objects.filter(user=request.user).order_by('-created_at')
+        serializer = DiagnoseSerializer(predictions, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+    # Count total predictions for each label
+    @swagger_auto_schema(
+        responses={status.HTTP_200_OK: openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'label': openapi.Schema(type=openapi.TYPE_STRING, description='Disease label'),
+                'count': openapi.Schema(type=openapi.TYPE_INTEGER, description='Total predictions'),
+            }
+        )},
+        operation_description="Count total predictions for each disease label.",
+        operation_summary="Count Disease Predictions",
+        tags=['Disease Detection']
+    )
+    @action(detail=False, methods=['get'], url_path='count')
+    def count_predictions(self, request):
+        predictions = Diagnose.objects.filter(user=request.user).values('label').annotate(count=models.Count('label'))
+        return Response(predictions)
+    
