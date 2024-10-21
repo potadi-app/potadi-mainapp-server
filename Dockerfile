@@ -14,7 +14,8 @@ RUN apt-get update && \
     libxext6 \
     libxrender-dev \
     python3-dev \
-    python3-pip 
+    python3-pip  \
+    memcached
 
 # Copy requirements.txt dan install dependensi
 COPY requirements.txt requirements.txt

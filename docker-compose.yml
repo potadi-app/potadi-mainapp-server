@@ -16,6 +16,7 @@ services:
       - .env
     depends_on:
       - db
+      - memcached
     networks:
       - potadi-net
     command: ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
@@ -32,6 +33,14 @@ services:
     networks:
       - potadi-net
     command: ["postgres", "-c", "log_statement=all"]  # show logs
+  memcached:
+    image: memcached:alpine
+    container_name: memcached
+    restart: always
+    ports:
+      - "11211:11211"
+    networks:
+      - potadi-net
 volumes:
   postgres_data:
 

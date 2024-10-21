@@ -2,14 +2,30 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import action
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from .serializers import DiagnoseSerializer
 from .services import predict_disease_saved_model
 from .models import Diagnose
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
 class DiagnoseViewSetAPI(viewsets.ViewSet):
     parser_classes = (MultiPartParser, FormParser)
+    
+    @swagger_auto_schema(
+        responses={status.HTTP_200_OK: DiagnoseSerializer(many=True)},
+        operation_description="Retrieve all disease predictions without pagination.",
+        operation_summary="List All Disease Predictions",
+        tags=['Disease Detection']
+    )
+    @action(detail=False, methods=['get'], url_path='all')
+    @method_decorator(cache_page(60*5)) # Cache for 5 minutes
+    def list_all(self, request):
+        predictions = Diagnose.objects.filter(user=request.user).order_by('-created_at')
+        serializer = DiagnoseSerializer(predictions, many=True, context={'request': request})
+        return Response(serializer.data)
     
     @swagger_auto_schema(
         responses={status.HTTP_200_OK: DiagnoseSerializer(many=True)},

@@ -26,5 +26,8 @@ python manage.py migrate --noinput
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
+# Start memcached
+memcached -m 512 -u nobody -p 11211 -u nobody &
+
 # Menjalankan perintah Gunicorn (atau perintah lainnya) yang dikirimkan ke container
 exec "$@"
